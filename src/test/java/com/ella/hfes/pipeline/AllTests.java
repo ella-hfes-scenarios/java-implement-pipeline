@@ -48,7 +48,7 @@ class AllTests {
     void errorInMiddleStage() {
         var pipeline = PipelineBuilder.<String>create()
                 .addStage("ok", s -> CompletableFuture.completedFuture(s))
-                .addStage("fail", s -> CompletableFuture.failedFuture(new RuntimeException("boom")))
+                .addStage("fail", (String s) -> CompletableFuture.<String>failedFuture(new RuntimeException("boom")))
                 .addStage("unreached", s -> CompletableFuture.completedFuture(s))
                 .build();
         var future = pipeline.execute("input");

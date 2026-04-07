@@ -3,29 +3,31 @@ package com.ella.hfes.pipeline;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 /**
  * Builder for constructing async processing pipelines.
  *
  * Usage:
  * <pre>
- * Pipeline<String, Integer> pipeline = PipelineBuilder.<String>create()
- *     .addStage("validate", input -> CompletableFuture.completedFuture(input.trim()))
- *     .addStage("parse", input -> CompletableFuture.completedFuture(Integer.parseInt(input)))
+ * Pipeline&lt;String, Integer&gt; pipeline = PipelineBuilder.&lt;String&gt;create()
+ *     .addStage("validate", input -&gt; CompletableFuture.completedFuture(input.trim()))
+ *     .addStage("parse", input -&gt; CompletableFuture.completedFuture(Integer.parseInt(input)))
  *     .build();
  *
  * int result = pipeline.execute("  42  ").get();
  * </pre>
  *
- * @param <I> the pipeline input type
+ * @param <S> the original pipeline input type (start type)
+ * @param <I> the current stage input type (changes as stages are added)
  */
-public class PipelineBuilder<I> {
+public class PipelineBuilder<S, I> {
 
     /**
      * Creates a new pipeline builder with the given input type.
+     * The start type and current type begin as the same type.
      */
-    public static <I> PipelineBuilder<I> create() {
+    @SuppressWarnings("unchecked")
+    public static <I> PipelineBuilder<I, I> create() {
         // TODO: Return a new builder instance
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -38,7 +40,7 @@ public class PipelineBuilder<I> {
      * @param <O>   the output type of this stage
      * @return a new builder with the stage appended
      */
-    public <O> PipelineBuilder<O> addStage(String name, Stage<I, O> stage) {
+    public <O> PipelineBuilder<S, O> addStage(String name, Stage<I, O> stage) {
         // TODO: Record the stage for later execution
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -52,7 +54,7 @@ public class PipelineBuilder<I> {
      * @param <O>     the output type
      * @return a new builder with the stage appended
      */
-    public <O> PipelineBuilder<O> addStage(String name, Stage<I, O> stage, Duration timeout) {
+    public <O> PipelineBuilder<S, O> addStage(String name, Stage<I, O> stage, Duration timeout) {
         // TODO: Stage with timeout enforcement
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -66,7 +68,7 @@ public class PipelineBuilder<I> {
      * @param <O>        the output type
      * @return a new builder with the stage appended
      */
-    public <O> PipelineBuilder<O> addStageWithRetry(String name, Stage<I, O> stage, int maxRetries) {
+    public <O> PipelineBuilder<S, O> addStageWithRetry(String name, Stage<I, O> stage, int maxRetries) {
         // TODO: Stage with retry on failure (exponential backoff)
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -80,7 +82,7 @@ public class PipelineBuilder<I> {
      * @param <O>    the output type of each parallel stage
      * @return a new builder producing a List of results
      */
-    public <O> PipelineBuilder<List<O>> addParallelStage(String name, List<Stage<I, O>> stages) {
+    public <O> PipelineBuilder<S, List<O>> addParallelStage(String name, List<Stage<I, O>> stages) {
         // TODO: Fan-out input to all stages, fan-in results
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -90,7 +92,7 @@ public class PipelineBuilder<I> {
      *
      * @return a Pipeline ready for execution
      */
-    public Pipeline<?, I> build() {
+    public Pipeline<S, I> build() {
         // TODO: Construct the pipeline from accumulated stages
         throw new UnsupportedOperationException("Not implemented yet");
     }

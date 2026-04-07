@@ -32,7 +32,7 @@ class VisibleTest {
     @Test
     void errorPropagation() {
         Pipeline<String, Integer> pipeline = PipelineBuilder.<String>create()
-                .addStage("fail", input -> CompletableFuture.failedFuture(
+                .addStage("fail", input -> CompletableFuture.<Integer>failedFuture(
                         new RuntimeException("stage error")))
                 .build();
 
